@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const server_url = "http://localhost:5000/api/v1/app";
+const server_url = "https://payments-3z6q.onrender.com/api/v1/app";
 // Async thunk to fetch the summary data
 export const fetchSummary = createAsyncThunk(
   "transactions/fetchSummary",

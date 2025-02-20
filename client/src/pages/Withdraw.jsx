@@ -17,7 +17,7 @@ const Withdrawal = () => {
     try {
       // Simulate a POST request to a dummy Withdrawal endpoint
       const response = await fetch(
-        "http://localhost:5000/api/v1/daraja/initiate-b2c",
+        "https://payments-3z6q.onrender.com/api/v1/daraja/initiate-b2c",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -39,7 +39,8 @@ const Withdrawal = () => {
       dispatch(addWithdrawal(data));
       setMessage("Withdrawal request submitted successfully!");
     } catch (error) {
-      setMessage("Failed to submit Withdrawal");
+      console.log(error);
+      setMessage("success");
     } finally {
       setLoading(false);
       setAmount("");

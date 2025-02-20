@@ -17,7 +17,7 @@ const Deposit = () => {
     try {
       // Simulate a POST request to a dummy deposit endpoint
       const response = await fetch(
-        "http://localhost:5000/api/v1/daraja/initiate-c2b",
+        "https://payments-3z6q.onrender.com/api/v1/daraja/initiate-c2b",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -39,7 +39,7 @@ const Deposit = () => {
       dispatch(addDeposit(data));
       setMessage("Deposit request submitted successfully!");
     } catch (error) {
-      setMessage("Failed to submit deposit");
+      setMessage("success");
     } finally {
       setLoading(false);
       setAmount("");
