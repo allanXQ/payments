@@ -9,6 +9,7 @@ const axios = require("axios");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const { logger } = require("./utils");
+const path = require("path");
 
 const app = express();
 const port = process.env.PORT || 5005;
@@ -25,9 +26,15 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
 app.use("/api/v1/auth", require("./routes/auth"));
 app.use("/api/v1/app", require("./routes/app"));
 app.use("/api/v1/daraja", require("./routes/daraja"));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
 
 app.use(errorHandler);
 
