@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const appsSchema = new Schema(
   {
-    UserId: { type: mongoose.Types.ObjectId, ref: "Users", required: true },
+    // UserId: { type: mongoose.Types.ObjectId, ref: "Users", required: true },
     Name: {
       type: String,
       required: true,

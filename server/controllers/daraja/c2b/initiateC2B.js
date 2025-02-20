@@ -14,7 +14,7 @@ const initiateC2B = async (req, res) => {
   const password = Buffer.from(
     `${process.env.BUSINESS_SHORT_CODE}${process.env.PASSKEY}${timestamp}`
   ).toString("base64");
-  const CallBackURL = `${process.env.BASE_URL}/api/v1/daraja/c2b-webhook`;
+  const CallBackURL = `${process.env.SERVER_URL}/api/v1/daraja/c2b-webhook`;
   const userId = req.userId;
   const { Amount, PhoneNumber, AppId } = req.body;
 
@@ -51,11 +51,12 @@ const initiateC2B = async (req, res) => {
   }
 
   await Transactions.create({
-    UserId: new mongoose.Types.ObjectId(userId),
+    UserId: new mongoose.Types.ObjectId(AppId),
     AppId: new mongoose.Types.ObjectId(AppId),
     Amount,
     Status: "pending",
     PhoneNumber,
+    TransactionType: "Deposit",
     MerchantRequestID: stkData.MerchantRequestID,
     CheckoutRequestID: stkData.CheckoutRequestID,
   });

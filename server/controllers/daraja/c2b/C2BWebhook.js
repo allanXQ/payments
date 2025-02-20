@@ -47,26 +47,39 @@ const darajaWebhook = async (req, res) => {
         CheckoutRequestID,
       },
       {
-        status: "funded",
+        Status: "funded",
       }
     );
-    const TransactionUserId = TransactionUpdate.UserId;
-    const App = await Apps.findOne({ _id: TransactionUserId });
-    const b2bresult = await initiateB2B(App);
-    if (!b2bresult) {
-      await axios.post(App.C2BCallbackURL, {
-        message: "B2B transaction failed",
-        payload: {
-          MerchantRequestID,
-          PhoneNumber: metadata.PhoneNumber,
-          Amount: metadata.Amount,
-          ResultCode: 500,
-          ResultDesc: "Internal Server Error",
-          TransactionDate: new Date(),
-        },
-      });
-      //add transaction to failed b2b transactions for retry
-    }
+    console.log(TransactionUpdate);
+    // const TransactionUserId = TransactionUpdate.UserId;
+    // const App = await Apps.findOne({ _id: TransactionUserId });
+    // const b2bresult = await initiateB2B(App);
+    // if (!b2bresult) {
+    //   await axios.post(App.C2BCallbackURL, {
+    //     message: "B2B transaction failed",
+    //     payload: {
+    //       MerchantRequestID,
+    //       PhoneNumber: metadata.PhoneNumber,
+    //       Amount: metadata.Amount,
+    //       ResultCode: 500,
+    //       ResultDesc: "Internal Server Error",
+    //       TransactionDate: new Date(),
+    //     },
+    //   });
+    //   //add transaction to failed b2b transactions for retry
+    // }
+  } else {
+    await Transactions.findOneAndUpdate(
+      {
+        MerchantRequestID,
+        CheckoutRequestID,
+      },
+      {
+        Status: "failed",
+        ResultCode,
+        ResultDesc,
+      }
+    );
   }
   return res.status(200).json({ message: Messages.requestSuccessful });
 };

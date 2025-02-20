@@ -64,7 +64,7 @@ const createAppSchema = yup.object().shape({
 });
 
 const initiateC2BB2CSchema = yup.object().shape({
-  AppId: yup.string(Messages.invalidString).required(),
+  // AppId: yup.string(Messages.invalidString).required(),
   Amount: yup
     .number()
     .lessThan(walletConfig.maxDeposit)

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Transactions } = require(".");
 
 const transactionSchema = new mongoose.Schema({
   UserId: { type: mongoose.Types.ObjectId, ref: "Users", required: true },
@@ -10,6 +11,11 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     enum: ["pending", "funded", "cancelled", "forwading", "forwarded"],
     default: "pending",
+  },
+  TransactionType: {
+    type: String,
+    enum: ["Deposit", "Withdrawal"],
+    required: true,
   },
   ResultCode: { type: Number },
   ResultDesc: { type: String },

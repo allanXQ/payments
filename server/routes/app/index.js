@@ -7,7 +7,7 @@ const Router = require("express").Router();
 
 Router.post(
   "/create-app",
-  verifyjwt,
+  // verifyjwt,
   formValidate(createAppSchema),
   errorHOC(createApp)
 );
