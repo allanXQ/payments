@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addDeposit } from "../redux/slices/transactionsSlice";
+import { addWithdrawal } from "../redux/slices/transactionsSlice";
 
-const Deposit = () => {
+const Withdrawal = () => {
   const dispatch = useDispatch();
   const [Amount, setAmount] = useState("");
   const [PhoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleDeposit = async (e) => {
+  const handleWithdrawal = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     try {
-      // Simulate a POST request to a dummy deposit endpoint
+      // Simulate a POST request to a dummy Withdrawal endpoint
       const response = await fetch(
-        "http://localhost:5000/api/v1/daraja/initiate-c2b",
+        "http://localhost:5000/api/v1/daraja/initiate-b2c",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -33,13 +33,13 @@ const Deposit = () => {
         throw new Error("Network response was not ok");
       }
 
-      // Assume the API returns the new deposit object
+      // Assume the API returns the new Withdrawal object
       const data = await response.json();
 
-      dispatch(addDeposit(data));
-      setMessage("Deposit request submitted successfully!");
+      dispatch(addWithdrawal(data));
+      setMessage("Withdrawal request submitted successfully!");
     } catch (error) {
-      setMessage("Failed to submit deposit");
+      setMessage("Failed to submit Withdrawal");
     } finally {
       setLoading(false);
       setAmount("");
@@ -49,9 +49,9 @@ const Deposit = () => {
 
   return (
     <div className="container width-[100vw] items-center justify-center flex flex-col">
-      <h2 className="text-3xl font-bold mb-6">Make a Deposit</h2>
+      <h2 className="text-3xl font-bold mb-6">Make a Withdrawal</h2>
       <form
-        onSubmit={handleDeposit}
+        onSubmit={handleWithdrawal}
         className="bg-white shadow rounded p-6 max-w-md"
       >
         {message && <div className="mb-4 text-green-600">{message}</div>}
@@ -88,11 +88,11 @@ const Deposit = () => {
           disabled={loading}
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
         >
-          {loading ? "Processing..." : "Submit Deposit"}
+          {loading ? "Processing..." : "Submit Withdrawal"}
         </button>
       </form>
     </div>
   );
 };
 
-export default Deposit;
+export default Withdrawal;

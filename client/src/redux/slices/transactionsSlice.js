@@ -1,4 +1,32 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+const server_url = "http://localhost:5000/api/v1/app";
+// Async thunk to fetch the summary data
+export const fetchSummary = createAsyncThunk(
+  "transactions/fetchSummary",
+  async () => {
+    const response = await fetch(`${server_url}/summary`);
+    return response.json();
+  }
+);
+
+// Async thunk to fetch deposits data
+export const fetchDeposits = createAsyncThunk(
+  "transactions/fetchDeposits",
+  async () => {
+    const response = await fetch(`${server_url}/deposits`);
+    return response.json();
+  }
+);
+
+// Async thunk to fetch withdrawals data
+export const fetchWithdrawals = createAsyncThunk(
+  "transactions/fetchWithdrawals",
+  async () => {
+    const response = await fetch(`${server_url}/withdrawals`);
+    return response.json();
+  }
+);
 
 const initialState = {
   summary: {
@@ -8,41 +36,39 @@ const initialState = {
   },
   deposits: [],
   withdrawals: [],
+  status: "idle",
+  error: null,
 };
 
 const transactionsSlice = createSlice({
   name: "transactions",
   initialState,
   reducers: {
-    setSummary: (state, action) => {
-      state.summary = action.payload;
-    },
+    // These can still be used to update the state locally (e.g., after a successful deposit)
     addDeposit: (state, action) => {
       state.deposits.push(action.payload);
-      // Update summary (naively)
       state.summary.totalDeposits += action.payload.amount;
       state.summary.netBalance += action.payload.amount;
     },
     addWithdrawal: (state, action) => {
       state.withdrawals.push(action.payload);
-      // Update summary (naively)
       state.summary.totalWithdrawals += action.payload.amount;
       state.summary.netBalance -= action.payload.amount;
     },
-    setDeposits: (state, action) => {
-      state.deposits = action.payload;
-    },
-    setWithdrawals: (state, action) => {
-      state.withdrawals = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchSummary.fulfilled, (state, action) => {
+        state.summary = action.payload;
+      })
+      .addCase(fetchDeposits.fulfilled, (state, action) => {
+        state.deposits = action.payload;
+      })
+      .addCase(fetchWithdrawals.fulfilled, (state, action) => {
+        state.withdrawals = action.payload;
+      });
   },
 });
 
-export const {
-  setSummary,
-  addDeposit,
-  addWithdrawal,
-  setDeposits,
-  setWithdrawals,
-} = transactionsSlice.actions;
+export const { addDeposit, addWithdrawal } = transactionsSlice.actions;
 export default transactionsSlice.reducer;

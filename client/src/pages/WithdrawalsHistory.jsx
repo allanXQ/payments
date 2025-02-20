@@ -1,8 +1,14 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchWithdrawals } from "../redux/slices/transactionsSlice";
 
 const WithdrawalsHistory = () => {
+  const dispatch = useDispatch();
   const withdrawals = useSelector((state) => state.transactions.withdrawals);
+
+  useEffect(() => {
+    dispatch(fetchWithdrawals());
+  }, [dispatch]);
 
   return (
     <div>
@@ -23,19 +29,20 @@ const WithdrawalsHistory = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {withdrawals.map((withdrawal, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {withdrawal.date}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  ${withdrawal.amount}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {withdrawal.status}
-                </td>
-              </tr>
-            ))}
+            {Array.isArray(withdrawals.withdrawals) &&
+              withdrawals.withdrawals.map((withdrawal, index) => (
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {withdrawal.PhoneNumber}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    ${withdrawal.Amount}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {withdrawal.Status}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

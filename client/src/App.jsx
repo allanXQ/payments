@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Deposit from "./pages/Deposit";
+import Withdraw from "./pages/Withdraw";
 import DepositsHistory from "./pages/DepositsHistory";
 import WithdrawalsHistory from "./pages/WithdrawalsHistory";
 
@@ -35,6 +36,12 @@ function App() {
             >
               Deposit
             </Link>
+            <Link
+              className="mx-2 text-gray-600 hover:text-blue-500"
+              to="/withdraw"
+            >
+              Withdraw
+            </Link>
           </div>
         </div>
       </nav>
@@ -44,6 +51,7 @@ function App() {
           <Route path="/deposits" element={<DepositsHistory />} />
           <Route path="/withdrawals" element={<WithdrawalsHistory />} />
           <Route path="/deposit" element={<Deposit />} />
+          <Route path="/withdraw" element={<Withdraw />} />
         </Routes>
       </div>
     </div>

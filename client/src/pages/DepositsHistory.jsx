@@ -1,8 +1,15 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchDeposits } from "../redux/slices/transactionsSlice";
 
 const DepositsHistory = () => {
+  const dispatch = useDispatch();
   const deposits = useSelector((state) => state.transactions.deposits);
+  console.log(deposits);
+
+  useEffect(() => {
+    dispatch(fetchDeposits());
+  }, [dispatch]);
 
   return (
     <div>
@@ -23,17 +30,20 @@ const DepositsHistory = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {deposits.map((deposit, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">{deposit.date}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  ${deposit.amount}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {deposit.status}
-                </td>
-              </tr>
-            ))}
+            {Array.isArray(deposits.deposits) &&
+              deposits.deposits.map((deposit, index) => (
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {deposit.PhoneNumber}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    ${deposit.Amount}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {deposit.Status}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
