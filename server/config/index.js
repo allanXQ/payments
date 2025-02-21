@@ -14,7 +14,7 @@ const allowedOrigins = [
   "196.201.212.136",
   "196.201.212.74",
   "196.201.212.69",
-  "http://localhost:5000",
+  "https://payments-3z6q.onrender.com",
 ];
 
 const walletConfig = {

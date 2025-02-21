@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self'; connect-src 'self' http://localhost:5000; frame-ancestors 'self'; script-src 'self' 'unsafe-inline';"
+    "default-src 'self'; connect-src 'self' https://payments-3z6q.onrender.com; frame-ancestors 'self'; script-src 'self' 'unsafe-inline';"
   );
   next();
 });

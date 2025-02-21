@@ -17,7 +17,7 @@ const Withdrawal = () => {
     try {
       // Simulate a POST request to a dummy Withdrawal endpoint
       const response = await fetch(
-        "http://localhost:5000/api/v1/daraja/initiate-b2c",
+        "https://payments-3z6q.onrender.com/api/v1/daraja/initiate-b2c",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
