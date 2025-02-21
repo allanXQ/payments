@@ -25,6 +25,13 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; connect-src 'self' http://localhost:5000; frame-ancestors 'self'; script-src 'self' 'unsafe-inline';"
+  );
+  next();
+});
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
