@@ -16,18 +16,15 @@ const Withdrawal = () => {
 
     try {
       // Simulate a POST request to a dummy Withdrawal endpoint
-      const response = await fetch(
-        "https://payments-3z6q.onrender.com/api/v1/daraja/initiate-b2c",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            Amount: parseFloat(Amount),
-            AppId: "67b75d3aff03e174eb8a5229",
-            PhoneNumber,
-          }),
-        }
-      );
+      const response = await fetch(`${config.server_url}/daraja/initiate-b2c`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          Amount: parseFloat(Amount),
+          AppId: "67b75d3aff03e174eb8a5229",
+          PhoneNumber,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

@@ -3,6 +3,9 @@ const { verifyjwt, formValidate } = require("../../middleware");
 const { errorHOC } = require("../../utils");
 const { createAppSchema } = require("../../yupschemas");
 const transactionControllers = require("../../controllers/app/transactioncontrollers");
+const multer = require("multer");
+const { uploadExcel } = require("../../controllers/app/uploadExcel");
+const upload = multer({ dest: "uploads/" });
 
 const Router = require("express").Router();
 
@@ -15,5 +18,8 @@ Router.post(
 Router.get("/deposits", transactionControllers.getDeposits);
 Router.get("/withdrawals", transactionControllers.getWithdrawals);
 Router.get("/summary", transactionControllers.getSummary);
+
+// API Endpoint to Handle File Upload
+Router.post("/upload", upload.single("file"), uploadExcel);
 
 module.exports = Router;

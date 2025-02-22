@@ -1,4 +1,5 @@
 {
+  "watch": [".", "../client/*"],
   "ignore": [
     "/*.json",
     "node_modules/*",
@@ -8,6 +9,7 @@
     "logs/*",
     "tsconfig.json",
     "tslint.json",
-    "webpack.config.js"
+    "webpack.config.js",
+    "client/dist"
   ]
 }

@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const { errorHandler } = require("./middleware");
-const { allowedOrigins } = require("./config");
+const { allowedOrigins, server_url } = require("./config");
 const axios = require("axios");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self'; connect-src 'self' https://payments-3z6q.onrender.com; frame-ancestors 'self'; script-src 'self' 'unsafe-inline';"
+    `default-src 'self'; connect-src 'self' ${server_url}; frame-ancestors 'self'; script-src 'self' 'unsafe-inline';`
   );
   next();
 });
@@ -68,6 +68,7 @@ setInterval(pingSelf, pingInterval);
     })
     .then(() => {
       logger.info("Connected to database");
+
       app.listen(port, () => {
         logger.info(`Server running on port ${port}`);
       });

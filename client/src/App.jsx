@@ -5,6 +5,7 @@ import Deposit from "./pages/Deposit";
 import Withdraw from "./pages/Withdraw";
 import DepositsHistory from "./pages/DepositsHistory";
 import WithdrawalsHistory from "./pages/WithdrawalsHistory";
+import UploadExcel from "./pages/UploadExcel";
 
 function App() {
   return (
@@ -42,6 +43,12 @@ function App() {
             >
               Withdraw
             </Link>
+            <Link
+              className="mx-2 text-gray-600 hover:text-blue-500"
+              to="/excel"
+            >
+              Upload Excel
+            </Link>
           </div>
         </div>
       </nav>
@@ -52,6 +59,7 @@ function App() {
           <Route path="/withdrawals" element={<WithdrawalsHistory />} />
           <Route path="/deposit" element={<Deposit />} />
           <Route path="/withdraw" element={<Withdraw />} />
+          <Route path="/excel" element={<UploadExcel />} />
         </Routes>
       </div>
     </div>

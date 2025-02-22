@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import config from "../../config";
 
-const server_url = "https://payments-3z6q.onrender.com/api/v1/app";
+const server_url = config.server_url;
 // Async thunk to fetch the summary data
 export const fetchSummary = createAsyncThunk(
   "transactions/fetchSummary",
   async () => {
-    const response = await fetch(`${server_url}/summary`);
+    const response = await fetch(`${server_url}/app/summary`);
     return response.json();
   }
 );
@@ -14,7 +15,7 @@ export const fetchSummary = createAsyncThunk(
 export const fetchDeposits = createAsyncThunk(
   "transactions/fetchDeposits",
   async () => {
-    const response = await fetch(`${server_url}/deposits`);
+    const response = await fetch(`${server_url}/app/deposits`);
     return response.json();
   }
 );
@@ -23,7 +24,7 @@ export const fetchDeposits = createAsyncThunk(
 export const fetchWithdrawals = createAsyncThunk(
   "transactions/fetchWithdrawals",
   async () => {
-    const response = await fetch(`${server_url}/withdrawals`);
+    const response = await fetch(`${server_url}/app/withdrawals`);
     return response.json();
   }
 );

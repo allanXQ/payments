@@ -4,9 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "install_client": "cd ../client && npm install",
+    "install": "cd ../client && npm install && cd ../server && npm install",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js",
-    "prod": "cd ../client && npm install && npm run build && cd ../server && node server.js"
+    "dev": "node clientEnv.js && cd ../client && npm run build && cd ../server && nodemon server.js",
+    "prod": "node clientEnv.js && cd ../client && npm install && npm run build && cd ../server && node server.js"
   },
   "author": "Allan Juma",
   "license": "ISC",
@@ -21,8 +23,10 @@
     "jsonwebtoken": "^9.0.2",
     "module-alias": "^2.2.3",
     "mongoose": "^8.10.1",
+    "multer": "^1.4.5-lts.1",
     "nodejs-nodemailer-outlook": "^1.2.4",
     "winston": "^3.17.0",
+    "xlsx": "^0.18.5",
     "yup": "^1.6.1"
   },
   "devDependencies": {

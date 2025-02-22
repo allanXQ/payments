@@ -1,4 +1,11 @@
 const Messages = require("./messages");
+const fs = require("fs");
+const path = require("path");
+
+const ENV = process.env.ENV;
+const DEV_SERVER_URL = process.env.DEV_SERVER_URL;
+const PROD_SERVER_URL = process.env.PROD_SERVER_URL;
+const server_url = ENV === "dev" ? DEV_SERVER_URL : PROD_SERVER_URL;
 
 const allowedOrigins = [
   //add only client ips here. remove these and whitelist in nginx
@@ -14,7 +21,7 @@ const allowedOrigins = [
   "196.201.212.136",
   "196.201.212.74",
   "196.201.212.69",
-  "https://payments-3z6q.onrender.com",
+  server_url,
 ];
 
 const walletConfig = {
@@ -32,4 +39,5 @@ module.exports = {
   allowedOrigins,
   Messages,
   walletConfig,
+  server_url,
 };
