@@ -9,6 +9,7 @@
     "dev": "concurrently \"node clientEnv.js && npm run client\" \"npm run server\"",
     "install_client": "cd ../client && npm install",
     "install": "cd ../client && npm install && cd ../server && npm install",
+    "dummy": "echo \"dummy\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prod": "node clientEnv.js && cd ../client && npm install && npm run build && cd ../server && node server.js"
   },
