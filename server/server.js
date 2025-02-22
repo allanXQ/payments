@@ -49,7 +49,7 @@ const pingInterval = 840000; // 14 minutes in milliseconds
 
 function pingSelf() {
   axios
-    .get("https://tinywebhook.onrender.com")
+    .get("https://payments-3z6q.onrender.com/")
     .then((response) => {
       console.log("Service pinged successfully:", response.status);
     })
@@ -58,7 +58,7 @@ function pingSelf() {
     });
 }
 
-// setInterval(pingSelf, pingInterval);
+setInterval(pingSelf, pingInterval);
 
 (async () => {
   return mongoose
