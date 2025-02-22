@@ -28,9 +28,7 @@ const Transactions = () => {
     }
   };
 
-  return (
-    <div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg text-center"></div>
-  );
+  return <div className=""></div>;
 };
 
 export default Transactions;
