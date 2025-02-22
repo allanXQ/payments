@@ -4,10 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "client": "cd ../client && npm run dev",
+    "server": "nodemon server.js",
+    "dev": "concurrently \"node clientEnv.js && npm run client\" \"npm run server\"",
     "install_client": "cd ../client && npm install",
     "install": "cd ../client && npm install && cd ../server && npm install",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node clientEnv.js && cd ../client && npm run build && cd ../server && nodemon server.js",
     "prod": "node clientEnv.js && cd ../client && npm install && npm run build && cd ../server && node server.js"
   },
   "author": "Allan Juma",
@@ -30,6 +32,7 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "nodemon": "^3.1.9"
   }
 }

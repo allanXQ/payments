@@ -8,6 +8,8 @@ const UploadExcel = () => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(false);
+  const [parsedData, setParsedData] = useState([]);
+  const [showData, setShowData] = useState(false);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -34,21 +36,24 @@ const UploadExcel = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${config.server_url}/app/upload`, {
+      await fetch(`${config.server_url}/app/upload`, {
         method: "POST",
         body: formData,
-      });
-
-      setProgress(70); // Mid-progress
-      if (response.ok) {
-        setMessage("File uploaded successfully!");
-        setError(false);
-        setProgress(100);
-      } else {
-        setMessage("Error uploading file.");
-        setError(true);
-        setProgress(0);
-      }
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setMessage("File uploaded successfully!");
+          setError(false);
+          setProgress(100);
+          setParsedData(data.data);
+          setShowData(true);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          setMessage("Error uploading file.");
+          setError(true);
+          setProgress(0);
+        });
     } catch (error) {
       setMessage("Failed to upload file. Server may be down.");
       setError(true);
@@ -59,7 +64,37 @@ const UploadExcel = () => {
     }
   };
 
-  return (
+  const handleInitTransactions = async () => {
+    setLoading(true);
+    setMessage("");
+    setError(false);
+
+    try {
+      const response = await fetch(
+        `${config.server_url}/app/init-transactions`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: parsedData.data }),
+        }
+      );
+
+      if (response.ok) {
+        setMessage("Transactions initiated successfully!");
+        setError(false);
+      } else {
+        setMessage("Error initiating transactions.");
+        setError(true);
+      }
+    } catch (error) {
+      setMessage("Failed to initiate transactions. Server may be down.");
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return !showData ? (
     <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
       <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
         Upload Excel File
@@ -138,6 +173,62 @@ const UploadExcel = () => {
           {message}
         </div>
       )}
+    </div>
+  ) : (
+    <div>
+      <h2 className="text-3xl font-bold mb-6">Uploaded Transaction Details</h2>
+      <div className="bg-white shadow rounded overflow-hidden">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Phone Number
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Amount
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {Array.isArray(parsedData) &&
+              parsedData.map((detail, index) => (
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {detail.PhoneNumber}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    ${detail.Amount}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+      {message && (
+        <div
+          className={`mt-4 p-3 rounded-md text-center ${
+            error ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
+          }`}
+        >
+          {error ? (
+            <XCircle className="inline w-5 h-5 mr-2" />
+          ) : (
+            <CheckCircle className="inline w-5 h-5 mr-2" />
+          )}
+          {message}
+        </div>
+      )}
+      <button
+        onClick={handleInitTransactions}
+        className={`w-full mt-5 px-4 py-3 rounded-lg font-semibold text-white transition ${
+          loading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-500 hover:bg-blue-600"
+        }`}
+        disabled={loading}
+      >
+        {loading ? "Processing..." : "Initiate Batch Payments"}
+      </button>
     </div>
   );
 };
