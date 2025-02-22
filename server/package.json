@@ -11,7 +11,7 @@
     "install": "cd ../client && npm install && cd ../server && npm install",
     "dummy": "echo \"dummy\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "node clientEnv.js && cd ../client && npm install && npm run build && cd ../server && node server.js"
+    "prod": "npm install && node clientEnv.js && cd ../client && npm install && npm run build && cd ../server && node server.js"
   },
   "author": "Allan Juma",
   "license": "ISC",
