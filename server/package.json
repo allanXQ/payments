@@ -4,14 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "install": "npm install && npm run install:client",
-    "install:client": "cd client && npm install",
     "dev": "concurrently \"node clientEnv.js && npm run client\" \"npm run server\"",
     "client": "cd client && npm run dev",
     "server": "nodemon server.js",
-    "build": "cd client && npm run build",
+    "build:client": "cd client && npm install && npm run build",
     "start": "node server.js",
-    "prod": "node clientEnv.js && npm run build && npm run start"
+    "prod": "npm install && node clientEnv.js && npm run build:client && npm run start"
   },
   "author": "Allan Juma",
   "license": "ISC",
