@@ -6,6 +6,7 @@ import Withdraw from "./pages/Withdraw";
 import DepositsHistory from "./pages/DepositsHistory";
 import WithdrawalsHistory from "./pages/WithdrawalsHistory";
 import UploadExcel from "./pages/UploadExcel";
+import Transactions from "./pages/transactions";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
           <Route path="/withdraw" element={<Withdraw />} />
           <Route path="/excel" element={<UploadExcel />} />
         </Routes>
+        <Transactions />
       </div>
     </div>
   );
