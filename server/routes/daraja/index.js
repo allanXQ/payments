@@ -25,7 +25,7 @@ router.post("/c2b-webhook", errorHOC(C2BWebhook)); //internal url- make it hard 
 router.post(
   "/initiate-b2c",
   // validateApiKey,
-  formValidate(initiateC2BB2CSchema),
+  // formValidate(initiateC2BB2CSchema),
   errorHOC(initiateB2C)
 );
 

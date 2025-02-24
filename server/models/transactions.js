@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
-const { Transactions } = require(".");
 
 const transactionSchema = new mongoose.Schema({
   UserId: { type: mongoose.Types.ObjectId, ref: "Users", required: true },
   AppId: { type: mongoose.Types.ObjectId, ref: "Apps", required: true },
   Amount: { type: Number, required: true },
   PhoneNumber: { type: String, required: true },
-  MpesaRef: { type: String },
+  TransactionId: { type: String },
   Status: {
     type: String,
     enum: ["pending", "funded", "cancelled", "forwading", "forwarded"],
@@ -20,8 +19,14 @@ const transactionSchema = new mongoose.Schema({
   ResultCode: { type: Number },
   ResultDesc: { type: String },
   TransactionDate: { type: Date },
-  MerchantRequestID: { type: String, required: true },
-  CheckoutRequestID: { type: String, required: true },
+  MerchantRequestID: { type: String },
+  CheckoutRequestID: { type: String },
+  ReceiverPartyPublicName: { type: String },
+  TransactionCompletedDateTime: { type: String },
+  ConversationID: { type: String },
+  ResponseCode: { type: String },
+  ResponseDescription: { type: String },
+  OriginatorConversationID: { type: String },
 });
 
 const transactions = mongoose.model("transactions", transactionSchema);

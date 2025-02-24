@@ -27,13 +27,7 @@ const generateSecurityCredentials = (initiatorPassword, timestamp) => {
 
 const initiateB2C = async (req, res) => {
   try {
-    // const { recipients } = req.body;
-    const recipients = [
-      {
-        PhoneNumber: "254748517525",
-        Amount: 10,
-      },
-    ];
+    const { recipients } = req.body;
     const accessToken = await generateAccessToken();
 
     const url = `https://api.safaricom.co.ke/mpesa/b2c/v3/paymentrequest`;

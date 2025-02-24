@@ -59,13 +59,11 @@ function pingSelf() {
 }
 
 setInterval(pingSelf, pingInterval);
+process.on("warning", (e) => console.warn(e.stack));
 
 (async () => {
   return mongoose
-    .connect(process.env.DATABASE, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    .connect(process.env.DATABASE)
     .then(() => {
       logger.info("Connected to database");
 
