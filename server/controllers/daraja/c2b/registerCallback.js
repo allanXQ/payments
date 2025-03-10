@@ -5,7 +5,7 @@ const registerC2BConfirmationUrl = async (req, res) => {
   const accessToken = await generateAccessToken();
   const auth = `Bearer ${accessToken}`;
   console.log(auth);
-  const url = "https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl";
+  const url = "https://api.safaricom.co.ke/mpesa/c2b/v2/registerurl";
 
   const payload = {
     ShortCode: process.env.BUSINESS_SHORT_CODE,
