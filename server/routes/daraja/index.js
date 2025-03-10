@@ -10,6 +10,8 @@ const {
   B2CResultURL,
   B2BTimeoutURL,
 } = require("../../controllers/daraja");
+const confirmationUrl = require("../../controllers/daraja/c2b/confirmationUrl");
+const registerC2BConfirmationUrl = require("../../controllers/daraja/c2b/registerCallback");
 const { validateApiKey, formValidate } = require("../../middleware");
 const { errorHOC } = require("../../utils");
 const { initiateC2BB2CSchema } = require("../../yupschemas");
@@ -28,6 +30,9 @@ router.post(
   // formValidate(initiateC2BB2CSchema),
   errorHOC(initiateB2C)
 );
+
+router.post("/c2b-confirmation-url", errorHOC(confirmationUrl));
+router.get("/register-c2b-urls", errorHOC(registerC2BConfirmationUrl));
 
 router.post("/b2c-resulturl", errorHOC(B2CResultURL)); //internal url- make it hard to fuzz
 

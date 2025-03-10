@@ -1,26 +1,32 @@
 const { generateAccessToken, getTimeStamp } = require("../../../utils");
+const axios = require("axios");
 
-const registerC2BCallback = (req, res) => {
-  app.get("/register-c2b-urls", async (req, res) => {
-    const token = await generateAccessToken();
-    const url = "https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl";
+const registerC2BConfirmationUrl = async (req, res) => {
+  const accessToken = await generateAccessToken();
+  const auth = `Bearer ${accessToken}`;
+  console.log(auth);
+  const url = "https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl";
 
-    const payload = {
-      ShortCode: process.env.BUSINESS_SHORT_CODE,
-      ResponseType: "Completed",
-      ConfirmationURL: `${process.env.CALLBACK_URL}/mpesa/confirmation`,
-      ValidationURL: `${process.env.CALLBACK_URL}/mpesa/validation`,
-    };
+  const payload = {
+    ShortCode: process.env.BUSINESS_SHORT_CODE,
+    ResponseType: "Completed",
+    ConfirmationURL: `https://verdant.com/api/v1/daraja/c2b-confirmation-url`,
+    ValidationURL: `https://verdant.com/api/v1/daraja/validation`,
+  };
 
-    try {
-      const response = await axios.post(url, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      res.json(response.data);
-    } catch (error) {
-      res.status(500).json(error.response.data);
-    }
-  });
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: auth,
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response);
+    res.json(response.data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error.message);
+  }
 };
 
-module.exports = registerC2BCallback;
+module.exports = registerC2BConfirmationUrl;
