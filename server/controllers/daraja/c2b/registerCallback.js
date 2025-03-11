@@ -1,17 +1,17 @@
+const { server_url } = require("../../../config");
 const { generateAccessToken, getTimeStamp } = require("../../../utils");
 const axios = require("axios");
 
 const registerC2BConfirmationUrl = async (req, res) => {
   const accessToken = await generateAccessToken();
   const auth = `Bearer ${accessToken}`;
-  console.log(auth);
   const url = "https://api.safaricom.co.ke/mpesa/c2b/v2/registerurl";
 
   const payload = {
     ShortCode: process.env.BUSINESS_SHORT_CODE,
     ResponseType: "Completed",
-    ConfirmationURL: `https://verdant.com/api/v1/daraja/c2b-confirmation-url`,
-    ValidationURL: `https://verdant.com/api/v1/daraja/validation`,
+    ConfirmationURL: `${server_url}/api/v1/daraja/c2b-confirmation-url`,
+    ValidationURL: `${server_url}/api/v1/daraja/c2b-validation-url`,
   };
 
   try {
