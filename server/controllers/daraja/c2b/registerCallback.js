@@ -10,8 +10,8 @@ const registerC2BConfirmationUrl = async (req, res) => {
   const payload = {
     ShortCode: process.env.BUSINESS_SHORT_CODE,
     ResponseType: "Completed",
-    ConfirmationURL: `${server_url}/api/v1/daraja/c2b-confirmation-url`,
-    ValidationURL: `${server_url}/api/v1/daraja/c2b-validation-url`,
+    ConfirmationURL: `${process.env.PROD_SERVER_URL}/api/v1/daraja/c2b-confirmation-url`,
+    ValidationURL: `${process.env.PROD_SERVER_URL}/api/v1/daraja/c2b-validation-url`,
   };
 
   try {
