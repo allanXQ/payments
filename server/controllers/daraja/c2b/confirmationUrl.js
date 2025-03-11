@@ -1,5 +1,5 @@
 const confirmationUrl = (req, res) => {
-  console.log(req.body);
+  console.log(req);
 };
 
 module.exports = confirmationUrl;
