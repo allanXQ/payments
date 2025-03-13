@@ -41,7 +41,8 @@ const confirmationUrl = async (req, res) => {
       const match = inputString.match(/(\+?\d{10,13})/); // Supports +254 and 07********
       return match ? match[0] : null;
     };
-    const message = `Sender first name: ${FirstName}
+    const message = `
+    Sender first name: ${FirstName}
     Amount: ${TransAmount}
     Transaction ID: ${TransID}
     Phone Number: ${extractPhoneNumber(BillRefNumber) || BillRefNumber}
