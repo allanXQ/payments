@@ -1,26 +1,34 @@
 const axios = require("axios");
+const { MessageQueue } = require("../../models");
 
 async function sendPaymentNotification(message) {
   const token = process.env.PAYMENTS_BOT_KEY;
   const chatId = -4677658523;
 
   try {
-    const response = await axios.post(
-      `https://api.telegram.org/bot${token}/sendMessage`,
-      {
-        chat_id: chatId,
-        text: message,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
+    await axios
+      .post(
+        `https://api.telegram.org/bot${token}/sendMessage`,
+        {
+          chat_id: chatId,
+          text: message,
         },
-      }
-    );
-
-    console.log("✅ Message sent successfully:", response.data);
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {})
+      .catch(async (err) => {
+        await MessageQueue.create({
+          message,
+        });
+        throw new Error(err);
+      });
   } catch (error) {
     console.error("❌ Error sending message:", error.message);
+    throw new Error(error);
   }
 }
 
