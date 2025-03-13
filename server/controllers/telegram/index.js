@@ -17,7 +17,7 @@ async function sendPaymentNotification(transID, message) {
           headers: {
             "Content-Type": "application/json",
           },
-          timeout: 10000, // ✅ Correct placement
+          timeout: 20000, // ✅ Correct placement
         }
       )
       .then(async (res) => {
@@ -33,6 +33,11 @@ async function sendPaymentNotification(transID, message) {
             transID,
             message,
           });
+        } else {
+          await MessageQueue.updateOne(
+            { transID },
+            { lastUpdateTime: new Date().toLocaleString() }
+          ).exec();
         }
         console.log("❌ Error sending message:", err);
       });

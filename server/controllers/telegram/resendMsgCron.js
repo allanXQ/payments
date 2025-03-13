@@ -2,7 +2,7 @@ const cron = require("node-cron");
 const { MessageQueue } = require("../../models");
 const { sendPaymentNotification } = require(".");
 
-cron.schedule("*/5 * * * *", async () => {
+cron.schedule("*/1 * * * *", async () => {
   console.log("🔄 Running cron job to retry failed messages...");
 
   const failedMessages = await MessageQueue.find();
