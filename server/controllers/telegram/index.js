@@ -24,11 +24,10 @@ async function sendPaymentNotification(message) {
         await MessageQueue.create({
           message,
         });
-        throw new Error(err);
+        console.log("❌ Error sending message:", err);
       });
   } catch (error) {
     console.error("❌ Error sending message:", error.message);
-    throw new Error(error);
   }
 }
 

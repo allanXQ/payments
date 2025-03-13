@@ -66,7 +66,6 @@ process.on("warning", (e) => console.warn(e.stack));
     .connect(process.env.DATABASE)
     .then(() => {
       logger.info("Connected to database");
-
       app.listen(port, () => {
         logger.info(`Server running on port ${port}`);
       });

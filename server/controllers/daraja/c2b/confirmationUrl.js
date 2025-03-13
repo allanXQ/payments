@@ -11,14 +11,22 @@ const confirmationUrl = async (req, res) => {
       TransID,
       BillRefNumber,
     } = req.body;
-    console.log(req.body);
     // 20250312213418
-    const transactionTime = new Date(TransTime).toLocaleString();
+    const transactionTime = `${TransTime.slice(0, 4)}-${TransTime.slice(
+      4,
+      6
+    )}-${TransTime.slice(6, 8)
+      .concat(" ")
+      .concat(TransTime.slice(8, 10))
+      .concat(":")
+      .concat(TransTime.slice(10, 12))
+      .concat(":")
+      .concat(TransTime.slice(12, 14))}`;
     const message = `Sender first name: ${FirstName}
     \nAmount: ${TransAmount}
     \nTransaction ID: ${TransID}
     \nBill reference number: ${BillRefNumber}\nTime: ${transactionTime}`;
-    sendPaymentNotification(message);
+    await sendPaymentNotification(message);
   } catch (error) {
     console.error(error);
   } finally {
