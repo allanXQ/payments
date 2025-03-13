@@ -23,10 +23,10 @@ const confirmationUrl = async (req, res) => {
       .concat(":")
       .concat(TransTime.slice(12, 14))}`;
     const message = `Sender first name: ${FirstName}
-    \nAmount: ${TransAmount}
-    \nTransaction ID: ${TransID}
-    \nBill reference number: ${BillRefNumber}\nTime: ${transactionTime}`;
-    await sendPaymentNotification(message);
+    Amount: ${TransAmount}
+    Transaction ID: ${TransID}
+    Bill reference number: ${BillRefNumber}\nTime: ${transactionTime}`;
+    await sendPaymentNotification(TransID, message);
   } catch (error) {
     console.error(error);
   } finally {
