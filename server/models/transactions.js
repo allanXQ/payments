@@ -1,9 +1,21 @@
 const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema({
-  UserId: { type: mongoose.Types.ObjectId, ref: "Users", required: true },
-  AppId: { type: mongoose.Types.ObjectId, ref: "Apps", required: true },
+  UserId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Users",
+    required: true,
+    default: "67b75d3aff03e174eb8a5229",
+  },
+  AppId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Apps",
+    required: true,
+    default: "67b75d3aff03e174eb8a5229",
+  },
   Amount: { type: Number, required: true },
+  KepayAmount: { type: Number, required: true },
+  myAmount: { type: Number, required: true },
   PhoneNumber: { type: String, required: true },
   TransactionId: { type: String },
   Status: {
