@@ -70,11 +70,14 @@ const UploadExcel = () => {
     setError(false);
 
     try {
-      const response = await fetch(`${config.server_url}/daraja/initiate-b2c`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recipients: parsedData }),
-      });
+      const response = await fetch(
+        `${config.server_url}/daraja/initiate-bulk-b2c`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ recipients: parsedData }),
+        }
+      );
 
       if (response.ok) {
         setMessage("Transactions initiated successfully!");
