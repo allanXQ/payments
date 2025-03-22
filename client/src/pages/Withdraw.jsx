@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addWithdrawal } from "../redux/slices/transactionsSlice";
+import config from "../config";
 
 const Withdrawal = () => {
   const dispatch = useDispatch();
