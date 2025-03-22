@@ -14,8 +14,8 @@ const transactionSchema = new mongoose.Schema({
     default: "67b75d3aff03e174eb8a5229",
   },
   Amount: { type: Number, required: true },
-  KepayAmount: { type: Number, required: true },
-  myAmount: { type: Number, required: true },
+  KepayAmount: { type: Number },
+  myAmount: { type: Number },
   PhoneNumber: { type: String, required: true },
   TransactionId: { type: String },
   Status: {

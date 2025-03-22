@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { generateAccessToken, getTimeStamp } = require("../../../utils");
 const crypto = require("crypto");
-const { Messages } = require("../../../config");
+const { Messages, server_url } = require("../../../config");
 const fs = require("fs");
 const path = require("path");
 const { Transactions } = require("../../../models");
@@ -25,7 +25,7 @@ const generateSecurityCredentials = (initiatorPassword, timestamp) => {
   return encrypted.toString("base64");
 };
 
-const initiateB2C = async (req, res) => {
+const initiateBulkB2C = async (req, res) => {
   try {
     const { recipients } = req.body;
     const accessToken = await generateAccessToken();
@@ -49,8 +49,8 @@ const initiateB2C = async (req, res) => {
         PartyA: process.env.BUSINESS_SHORT_CODE,
         PartyB: PhoneNumber,
         Remarks: "Payment",
-        QueueTimeOutURL: `https://792a-102-214-72-6.ngrok-free.app/api/v1/daraja/b2c-timeouturl`,
-        ResultURL: `https://792a-102-214-72-6.ngrok-free.app/api/v1/daraja/b2c-resulturl`,
+        QueueTimeOutURL: `${server_url}/api/v1/daraja/b2c-timeouturl`,
+        ResultURL: `${server_url}/api/v1/daraja/b2c-resulturl`,
         Occasion: "Payment",
       };
 
@@ -67,7 +67,6 @@ const initiateB2C = async (req, res) => {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
-        console.log("response", response.data);
         transactions.push({
           ...data,
           ...dbData,
@@ -79,11 +78,16 @@ const initiateB2C = async (req, res) => {
     };
 
     // 🔹 Use `for...of` to properly handle async transactions
-    for (const recipient of recipients) {
-      await initiateTransaction(recipient.PhoneNumber, recipient.Amount);
+    async function processTransactions(recipients, delay) {
+      for (const recipient of recipients) {
+        await initiateTransaction(recipient.PhoneNumber, recipient.Amount);
+        await new Promise((resolve) => setTimeout(resolve, delay)); // Add interval
+      }
     }
 
-    console.log("Transactions:", transactions);
+    // Example usage with a 2-second delay (2000ms)
+    processTransactions(recipients, 5000);
+
     // 🔹 Wait for transactions to be created AFTER API calls complete
     if (transactions.length > 0) {
       try {
@@ -106,4 +110,4 @@ const initiateB2C = async (req, res) => {
   }
 };
 
-module.exports = initiateB2C;
+module.exports = initiateBulkB2C;
