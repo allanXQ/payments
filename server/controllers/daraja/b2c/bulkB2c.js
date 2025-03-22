@@ -21,15 +21,17 @@ const generateSecurityCredentials = (initiatorPassword, timestamp) => {
     },
     buffer
   );
-
   return encrypted.toString("base64");
 };
 
 const initiateBulkB2C = async (req, res) => {
   try {
     const { recipients } = req.body;
-    const accessToken = await generateAccessToken();
+    if (!recipients || recipients.length === 0) {
+      return res.status(400).json({ message: "No recipients provided" });
+    }
 
+    const accessToken = await generateAccessToken();
     const url = `https://api.safaricom.co.ke/mpesa/b2c/v3/paymentrequest`;
     const timestamp = getTimeStamp();
     const SecurityCredential = generateSecurityCredentials(
@@ -67,18 +69,17 @@ const initiateBulkB2C = async (req, res) => {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
-        transactions.push({
-          ...data,
-          ...dbData,
-          ...response.data,
-        });
+        transactions.push({ ...data, ...dbData, ...response.data });
       } catch (error) {
-        logger.error("Axios Error:", error);
-        throw new Error(error);
+        logger.error(
+          "Transaction failed for:",
+          PhoneNumber,
+          "Error:",
+          error.message
+        );
       }
     };
 
-    // 🔹 Use `for...of` to properly handle async transactions
     async function processTransactions(recipients, delay) {
       for (const recipient of recipients) {
         let phoneNumber = recipient.PhoneNumber;
@@ -88,33 +89,34 @@ const initiateBulkB2C = async (req, res) => {
         } else if (phoneNumber.startsWith("01")) {
           phoneNumber = phoneNumber.replace(/^01/, "2541");
         }
+
         await initiateTransaction(phoneNumber, recipient.Amount);
-        await new Promise((resolve) => setTimeout(resolve, delay)); // Add interval
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
 
-    // Example usage with a 2-second delay (2000ms)
-    processTransactions(recipients, 5000);
+    // Wait for all transactions to complete before proceeding
+    await processTransactions(recipients, 5000);
 
-    // 🔹 Wait for transactions to be created AFTER API calls complete
     if (transactions.length > 0) {
       try {
         await Transactions.insertMany(transactions);
-        console.log(
-          "Transactions successfully saved to database:",
-          transactions
-        );
+        logger.info("Transactions successfully saved:", transactions);
       } catch (dbError) {
-        console.error("Database Error:", dbError);
+        logger.error("Database Error:", dbError);
       }
     } else {
-      console.warn("No transactions were created!");
+      logger.warn("No transactions were created!");
     }
 
-    return res.status(200).json({ message: "Bulk transactions initiated" });
+    return res
+      .status(200)
+      .json({ message: "Bulk transactions initiated", transactions });
   } catch (error) {
-    console.error("Main Function Error:", error);
-    return res.status(400).json({ message: error.message });
+    logger.error("Main Function Error:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
