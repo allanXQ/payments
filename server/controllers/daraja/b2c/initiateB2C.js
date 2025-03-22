@@ -27,13 +27,7 @@ const generateSecurityCredentials = (initiatorPassword, timestamp) => {
 
 const initiateB2C = async (req, res) => {
   try {
-    // const { recipients } = req.body;
-    const recipients = [
-      {
-        PhoneNumber: "254748517525",
-        Amount: 10,
-      },
-    ];
+    const { PhoneNumber, Amount } = req.body;
     const accessToken = await generateAccessToken();
 
     const url = `https://api.safaricom.co.ke/mpesa/b2c/v3/paymentrequest`;
@@ -43,67 +37,37 @@ const initiateB2C = async (req, res) => {
       timestamp
     );
 
-    const transactions = [];
-
-    const initiateTransaction = async (PhoneNumber, Amount) => {
-      const data = {
-        InitiatorName: process.env.INITIATOR_NAME,
-        OriginatorConversationID: crypto.randomBytes(10).toString("hex"),
-        SecurityCredential,
-        CommandID: "BusinessPayment",
-        Amount,
-        PartyA: process.env.BUSINESS_SHORT_CODE,
-        PartyB: PhoneNumber,
-        Remarks: "Payment",
-        QueueTimeOutURL: `${server_url}/api/v1/daraja/b2c-timeouturl`,
-        ResultURL: `${server_url}/api/v1/daraja/b2c-resulturl`,
-        Occasion: "Payment",
-      };
-
-      const dbData = {
-        UserId: "67b75d3aff03e174eb8a5229",
-        AppId: "67b75d3aff03e174eb8a5229",
-        Status: "pending",
-        TransactionType: "Withdrawal",
-        PhoneNumber,
-      };
-
-      try {
-        const response = await axios.post(url, data, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-
-        console.log("response", response.data);
-        transactions.push({
-          ...data,
-          ...dbData,
-          ...response.data,
-        });
-      } catch (error) {
-        console.error("Axios Error:", error);
-      }
+    const data = {
+      InitiatorName: process.env.INITIATOR_NAME,
+      OriginatorConversationID: crypto.randomBytes(10).toString("hex"),
+      SecurityCredential,
+      CommandID: "BusinessPayment",
+      Amount,
+      PartyA: process.env.BUSINESS_SHORT_CODE,
+      PartyB: PhoneNumber,
+      Remarks: "Payment",
+      QueueTimeOutURL: `${server_url}/api/v1/daraja/b2c-timeouturl`,
+      ResultURL: `${server_url}/api/v1/daraja/b2c-resulturl`,
+      Occasion: "Payment",
     };
 
-    // 🔹 Use `for...of` to properly handle async transactions
-    for (const recipient of recipients) {
-      await initiateTransaction(recipient.PhoneNumber, recipient.Amount);
-    }
+    const dbData = {
+      UserId: "67b75d3aff03e174eb8a5229",
+      AppId: "67b75d3aff03e174eb8a5229",
+      Status: "pending",
+      TransactionType: "Withdrawal",
+      PhoneNumber,
+    };
 
-    console.log("Transactions:", transactions);
+    const response = await axios
+      .post(url, data, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((res) => {});
+    const transaction = { ...data, ...dbData, ...response.data };
+
     // 🔹 Wait for transactions to be created AFTER API calls complete
-    if (transactions.length > 0) {
-      try {
-        await Transactions.insertMany(transactions);
-        console.log(
-          "Transactions successfully saved to database:",
-          transactions
-        );
-      } catch (dbError) {
-        console.error("Database Error:", dbError);
-      }
-    } else {
-      console.warn("No transactions were created!");
-    }
+    await Transactions.create(transaction);
 
     return res.status(200).json({ message: Messages.transactionInitiated });
   } catch (error) {
