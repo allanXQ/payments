@@ -1,5 +1,5 @@
 require("dotenv").config();
-require("./controllers/telegram/resendMsgCron");
+// require("./controllers/telegram/resendMsgCron");
 
 const express = require("express");
 const cors = require("cors");
