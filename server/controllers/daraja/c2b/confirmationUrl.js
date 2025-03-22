@@ -57,7 +57,7 @@ const confirmationUrl = async (req, res) => {
       KepayAmount: parseFloat(TransAmount) - myAmount,
       myAmount,
     });
-    await sendPaymentNotification(TransID, message);
+    // await sendPaymentNotification(TransID, message);
   } catch (error) {
     console.error(error);
   } finally {
