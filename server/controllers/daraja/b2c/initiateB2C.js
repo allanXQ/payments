@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { generateAccessToken, getTimeStamp } = require("../../../utils");
 const crypto = require("crypto");
-const { Messages } = require("../../../config");
+const { Messages, server_url } = require("../../../config");
 const fs = require("fs");
 const path = require("path");
 const { Transactions } = require("../../../models");
@@ -55,8 +55,8 @@ const initiateB2C = async (req, res) => {
         PartyA: process.env.BUSINESS_SHORT_CODE,
         PartyB: PhoneNumber,
         Remarks: "Payment",
-        QueueTimeOutURL: `https://792a-102-214-72-6.ngrok-free.app/api/v1/daraja/b2c-timeouturl`,
-        ResultURL: `https://792a-102-214-72-6.ngrok-free.app/api/v1/daraja/b2c-resulturl`,
+        QueueTimeOutURL: `${server_url}/api/v1/daraja/b2c-timeouturl`,
+        ResultURL: `${server_url}/api/v1/daraja/b2c-resulturl`,
         Occasion: "Payment",
       };
 

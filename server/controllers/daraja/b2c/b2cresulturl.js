@@ -1,4 +1,5 @@
 const { Transactions } = require("../../../models");
+const { logger } = require("../../../utils");
 
 const B2CResultURL = async (req, res) => {
   try {
@@ -25,7 +26,7 @@ const B2CResultURL = async (req, res) => {
     );
     return null;
   } catch (error) {
-    throw error;
+    logger.error(error);
   }
 };
 
