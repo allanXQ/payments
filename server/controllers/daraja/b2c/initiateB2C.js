@@ -37,6 +37,14 @@ const initiateB2C = async (req, res) => {
       timestamp
     );
 
+    let phoneNumber = PhoneNumber;
+
+    if (phoneNumber.startsWith("07")) {
+      phoneNumber = phoneNumber.replace(/^07/, "2547");
+    } else if (phoneNumber.startsWith("01")) {
+      phoneNumber = phoneNumber.replace(/^01/, "2541");
+    }
+
     const data = {
       InitiatorName: process.env.INITIATOR_NAME,
       OriginatorConversationID: crypto.randomBytes(10).toString("hex"),
@@ -44,7 +52,7 @@ const initiateB2C = async (req, res) => {
       CommandID: "BusinessPayment",
       Amount,
       PartyA: process.env.BUSINESS_SHORT_CODE,
-      PartyB: PhoneNumber,
+      PartyB: phoneNumber,
       Remarks: "Payment",
       QueueTimeOutURL: `${server_url}/api/v1/daraja/b2c-timeouturl`,
       ResultURL: `${server_url}/api/v1/daraja/b2c-resulturl`,
