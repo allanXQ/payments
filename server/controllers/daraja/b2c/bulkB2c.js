@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { generateAccessToken, getTimeStamp } = require("../../../utils");
+const { generateAccessToken, getTimeStamp, logger } = require("../../../utils");
 const crypto = require("crypto");
 const { Messages, server_url } = require("../../../config");
 const fs = require("fs");
@@ -73,14 +73,22 @@ const initiateBulkB2C = async (req, res) => {
           ...response.data,
         });
       } catch (error) {
-        console.error("Axios Error:", error);
+        logger.error("Axios Error:", error);
+        throw new Error(error);
       }
     };
 
     // 🔹 Use `for...of` to properly handle async transactions
     async function processTransactions(recipients, delay) {
       for (const recipient of recipients) {
-        await initiateTransaction(recipient.PhoneNumber, recipient.Amount);
+        let phoneNumber = recipient.PhoneNumber;
+
+        if (phoneNumber.startsWith("07")) {
+          phoneNumber = phoneNumber.replace(/^07/, "2547");
+        } else if (phoneNumber.startsWith("01")) {
+          phoneNumber = phoneNumber.replace(/^01/, "2541");
+        }
+        await initiateTransaction(phoneNumber, recipient.Amount);
         await new Promise((resolve) => setTimeout(resolve, delay)); // Add interval
       }
     }
@@ -103,7 +111,7 @@ const initiateBulkB2C = async (req, res) => {
       console.warn("No transactions were created!");
     }
 
-    return res.status(200).json({ message: Messages.transactionInitiated });
+    return res.status(200).json({ message: "Bulk transactions initiated" });
   } catch (error) {
     console.error("Main Function Error:", error);
     return res.status(400).json({ message: error.message });
